@@ -17,7 +17,8 @@ In the following picture:
 ![Diagram](Kerb.png)
 
 ⚠️ Currently, there is only 1 functional Realm and 1 functional Service belonging to said realm. Those are `R1` and `luckyNumbers` respectively.
-### Classes Overview
+
+### Classes Overview 📂
 - `mainClasses` package:
   - `AuthServer` is the Authentication Server, which handles steps 1 and 2 of the protocol
   - `TGS_R1` is an example of TGS, specifically the TGS for the realm R1. It handles steps 3 and 4 of the protocol.
@@ -27,7 +28,7 @@ In the following picture:
   - `EndpointDetails` from the `utils` package: just a Model class to store data in a compact manner
   - `TimestampUtils` from the `utils` package: a series of utility functions to obtain, compare and parse timestamps and/or Date datatype
 
-### Where and How to Run
+### Where and How to Run ⌨️
 Everything is printed on the _System.out_ for the user to see (no graphic interface). 
 
 To run, launch all the servers first (Authentication Server, TGS Server, Service Server) and *then* launch the Client.
