@@ -14,6 +14,7 @@ In the following picture:
 * `KTGS` is a secret key shared between the Authentication Server and a specific TGS exclusively
 * `K_S_C` or `S_C_K` is the second session key, used between the Client and the requested Service to communicate safely
 
+![Diagram](Kerb.png)
 
 ⚠️ Currently, there is only 1 functional Realm and 1 functional Service belonging to said realm. Those are `R1` and `luckyNumbers` respectively.
 ### Classes Overview
