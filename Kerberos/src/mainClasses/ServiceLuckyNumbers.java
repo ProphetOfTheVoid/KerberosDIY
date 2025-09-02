@@ -64,14 +64,14 @@ public class ServiceLuckyNumbers {
 
 		String req, res;
 		while ((req = in.readLine()) != null) {
-			System.out.println("LN: received message: " + req + "\n");
+			// System.out.println("LN: received message:" + req + "\n");
 
 			try {
 				res = step6(req);
 				out.println(res);
 
 				String message = EncDecUtils.decrypt(in.readLine(), S_C_K);
-				System.out.println("LN: received message " + message);
+				System.out.println("LN: received message \n \t" + message);
 
 				service(in, out);
 
@@ -104,7 +104,8 @@ public class ServiceLuckyNumbers {
 		StringTokenizer bct = new StringTokenizer(bigPlainText, "||");
 		byte[] keyBytes = HexFormat.of().parseHex(bct.nextToken());
 		S_C_K = new SecretKeySpec(keyBytes, "AES");
-		System.out.println("LN: I will use the following key to communicate with C: " + S_C_K);
+		System.out.println("LN: I will use the following key to communicate with C: " + S_C_K
+				+ ". See how it matches what TGS said?");
 		currentUser = bct.nextToken();
 		Date bigDate = TimestampUtils.fromTimestampToDate(bct.nextToken());
 		int maxDelta = Integer.parseInt(bct.nextToken());
@@ -132,6 +133,7 @@ public class ServiceLuckyNumbers {
 		System.out.println("LN: conversion yiealds: " + smolDate.getTime());
 		long once = smolDate.getTime() + 1;
 		return EncDecUtils.encrypt(String.valueOf(once), S_C_K);
+
 	}
 
 	private static void service(BufferedReader in, PrintWriter out) throws GeneralSecurityException, IOException {
