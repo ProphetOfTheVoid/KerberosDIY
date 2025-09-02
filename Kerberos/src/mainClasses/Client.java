@@ -46,7 +46,8 @@ public class Client {
 			String request;
 			String formattedDate = TimestampUtils.getCurrentTimestamp();
 
-			System.out.println("C: Who are you?");
+			System.out.println(
+					"C: Who are you? (look up the setup function of AuthServer.java and choose an existing user)");
 			userID = scanner.nextLine();
 			System.out.println("C: To which realm would you like to connect to? (currently only R1 works)");
 			selectedRealm = scanner.nextLine();
@@ -56,19 +57,20 @@ public class Client {
 			out.println(request);
 
 			// - - - - -
-
+			System.out.println("");
 			String response = in.readLine(); // Receive step 2
 			out.close();
 			in.close();
 			socketAS.close();
+
+			// Create & Send step 3
+			request = step3(response, scanner);
 
 			// Establish connection with TicketGatingServer
 			Socket socketTGS = new Socket(TGS.IP, TGS.PORT);
 			out = new PrintWriter(socketTGS.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socketTGS.getInputStream()));
 
-			// Create & Send step 3
-			request = step3(response, scanner);
 			out.println(request);
 
 			// - - - - -
@@ -78,13 +80,14 @@ public class Client {
 			in.close();
 			socketTGS.close();
 
+			// Create & Send step 5
+			request = step5(response, scanner);
+
 			// Establish connection with Service
 			Socket socketS = new Socket(service.IP, service.PORT);
 			out = new PrintWriter(socketS.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socketS.getInputStream()));
 
-			// Create & Send step 5
-			request = step5(response, scanner);
 			out.println(request);
 
 			// - - - - -
@@ -126,18 +129,21 @@ public class Client {
 
 	private static String step3(String response, Scanner scanner) throws GeneralSecurityException, Exception {
 
-		System.out.println("C: Do you mind typing your password " + userID + " ?");
+		System.out.println("C: Do you mind typing your password " + userID
+				+ " ? (check it out in the setup function of AuthServer.java)");
 		pwd = scanner.nextLine();
 
 		SecretKeySpec userKey = EncDecUtils.generateKey(EncDecUtils.hashSHA256(pwd));
-		System.out.println("C: user key is: " + userKey.toString());
+		System.out.println(
+				"C: user key is: " + userKey.toString() + ". See how it matches the one printed out by AuthServer?");
 		String plainText = EncDecUtils.decrypt(response, userKey);
-		System.out.println("C: SUCCESS! The plaintext is: " + plainText + "\n");
+		System.out.println("\nC: SUCCESS in decyphering!!!");
 		StringTokenizer st = new StringTokenizer(plainText, "||");
 
 		byte[] keyBytes = HexFormat.of().parseHex(st.nextToken());
 		TGS_C_K = new SecretKeySpec(keyBytes, "AES");
-		System.out.println("C: I will use the following key to communicate with TGS: " + TGS_C_K);
+		System.out.println("C: I will use the following key to communicate with TGS: " + TGS_C_K
+				+ ". See how it matches with what TGS will find?\n");
 
 		String parenthesis = st.nextToken().replace("(", "").replace(")", "").replace(" ", "");
 		StringTokenizer stp = new StringTokenizer(parenthesis, ",");
@@ -147,7 +153,7 @@ public class Client {
 		st.nextToken(); // maxDelta
 		String innerCipher = st.nextToken(); // portion encrypted with TGS_AS_K
 
-		System.out.println("C: To which server of the realm " + selectedRealm
+		System.out.println("\nC: To which server of the realm " + selectedRealm
 				+ " would you like to connect to? (currently only luckyNumbers works)");
 		selectedServer = scanner.nextLine();
 
@@ -158,12 +164,13 @@ public class Client {
 
 	private static String step5(String response, Scanner scanner) throws Exception {
 		String plainText = EncDecUtils.decrypt(response, TGS_C_K);
-		System.out.println("C: SUCCESS! The plaintext is: " + plainText + "\n");
+		// System.out.println("C: SUCCESS! The plaintext is: " + plainText + "\n");
 		StringTokenizer st = new StringTokenizer(plainText, "||");
 
 		byte[] keyBytes = HexFormat.of().parseHex(st.nextToken());
 		S_C_K = new SecretKeySpec(keyBytes, "AES");
-		System.out.println("C: I will use the following key to communicate with S: " + S_C_K);
+		System.out.println("C: I will use the following key to communicate with S: " + S_C_K
+				+ ". See how it matches what TGS said?");
 
 		String parenthesis = st.nextToken().replace("(", "").replace(")", "").replace(" ", "");
 		StringTokenizer stp = new StringTokenizer(parenthesis, ",");
