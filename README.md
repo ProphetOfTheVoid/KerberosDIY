@@ -32,7 +32,9 @@ In the following picture:
 Everything is printed on the _System.out_ for the user to see (no graphic interface). 
 
 To run, launch all the servers first (Authentication Server, TGS Server, Service Server) and *then* launch the Client.
+
 Launch step-by-step:
 1. Position yourself in the `src` folder
-2. Compile with `javac mainClasses\AuthServer.java` for the Authentication Server (then do it for the TGS and Service Server too) → If this gives some version error, add the flag `--release 17`
+2. Compile with `javac mainClasses\AuthServer.java` for the Authentication Server (then do it for the TGS, the Service Server and the Client too) → If this gives some version error, add the flag `--release 17`
 3. Launch all the servers in different terminals using the commands `java mainClasses.AuthServer`, `java mainClasses.TGS_R1` and `java mainClasses.ServiceLuckyNumbers`
+4. Launch the client with `java mainClasses.Client`
