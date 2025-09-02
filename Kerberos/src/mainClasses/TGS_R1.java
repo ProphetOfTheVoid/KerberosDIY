@@ -71,7 +71,7 @@ public class TGS_R1 {
 
 		String req, res;
 		while ((req = in.readLine()) != null) {
-			System.out.println("R1: received message: " + req + "\n");
+			// System.out.println("R1: received message: " + req + "\n");
 
 			try {
 				res = step4(req);
@@ -149,7 +149,7 @@ public class TGS_R1 {
 
 		SecretKeySpec S_C_K = EncDecUtils
 				.generateKey(EncDecUtils.hashSHA256(new String(EncDecUtils.getTrueRandom(16))));
-		System.out.println("R1: S_C_K is: " + S_C_K.toString());
+		System.out.println("\nR1: Client and Service will communicate using the key: " + S_C_K.toString());
 		String hexKey = HexFormat.of().formatHex(S_C_K.getEncoded());
 
 		String timestamp = TimestampUtils.getCurrentTimestamp();
